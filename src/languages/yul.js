@@ -12,7 +12,7 @@ const {
     SOL_ASSEMBLY_KEYWORDS,
     baseAssembly,
     isNegativeLookbehindAvailable
-} = require("../common");
+} = require("../common.js");
 
 function hljsDefineYul(hljs) {
 
