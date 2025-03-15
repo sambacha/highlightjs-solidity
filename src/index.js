@@ -18,8 +18,8 @@ Website: https://docs.soliditylang.org/en/latest/grammar.html
  * @since:   2016-07-01
  */
 
-const solidityGrammar = require("./languages/solidity");
-const yulGrammar = require("./languages/yul");
+const solidityGrammar = require("./languages/solidity.js");
+const yulGrammar = require("./languages/yul.js");
 
 module.exports = function(hljs) {
     hljs.registerLanguage('solidity', solidityGrammar);

@@ -218,6 +218,42 @@ function hljsDefineSolidity(hljs) {
             HEX_APOS_STRING_MODE,
             HEX_QUOTE_STRING_MODE,
             hljs.C_LINE_COMMENT_MODE,
+            // NatSpec Support, which is just Javascript JSDoc style comments really.
+            hljs.COMMENT(
+                '/\\*\\*',
+                '\\*/',
+                {
+                  relevance : 0,
+                  contains : [
+                    {
+                      className : 'doctag',
+                      begin : '@[A-Za-z]+',
+                      contains : [
+                        {
+                          className: 'type',
+                          begin: '\\{',
+                          end: '\\}',
+                          excludeEnd: true,
+                          excludeBegin: true,
+                          relevance: 0
+                        },
+                        {
+                          className: 'variable',
+                          begin: IDENT_RE + '(?=\\s*(-)|$)',
+                          endsParent: true,
+                          relevance: 0
+                        },
+                        // eat spaces (not newlines) so we can find
+                        // types or variables
+                        {
+                          begin: /(?=[^\n])\s/,
+                          relevance: 0
+                        },
+                    ]
+                }
+              ]
+            }
+          ),
             hljs.C_BLOCK_COMMENT_MODE,
             SOL_NUMBER,
             SOL_SPECIAL_PARAMETERS,
