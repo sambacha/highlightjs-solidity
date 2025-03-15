@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /**
  * highlight.js Solidity syntax highlighting definition
  *
@@ -26,12 +27,12 @@ function hljsDefineSolidity(hljs) {
   // NOTE: unparameterized versions are *not* included here, those are included
   // manually
   const byteSizes = [];
-  for (var i = 0; i < 32; i++) {
+  for (let i = 0; i < 32; i++) {
     byteSizes[i] = i + 1;
   }
   const numSizes = byteSizes.map(function(bytes) { return bytes * 8; });
   const precisions = [];
-  for (i = 0; i <= 80; i++) {
+  for (let i = 0; i <= 80; i++) {
     precisions[i] = i;
   }
 
@@ -378,5 +379,4 @@ function hljsDefineSolidity(hljs) {
     illegal: /#/
   };
 }
-
 module.exports = hljsDefineSolidity;

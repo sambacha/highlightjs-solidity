@@ -1,4 +1,5 @@
-const hljs = require('highlight.js/lib/core');
+/* eslint-disable no-undef */
+const hljs = require('highlight.js/lib/core.js');
 const {
   isNegativeLookbehindAvailable,
   SOL_ASSEMBLY_KEYWORDS,
@@ -8,7 +9,7 @@ const {
   HEX_APOS_STRING_MODE,
   HEX_QUOTE_STRING_MODE,
   SOL_NUMBER
-} = require('./common');
+} = require('./common.js');
 
 
 // Mock for hljs methods that we need
