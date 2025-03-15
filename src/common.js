@@ -45,6 +45,7 @@ var SOL_NUMBER = {
 };
 
 var SOL_ASSEMBLY_KEYWORDS = {
+    $pattern: /[A-Za-z_$][A-Za-z_$0-9.]*/,
     keyword:
         'assembly ' +
         'let function ' +
@@ -112,7 +113,6 @@ function baseAssembly(hljs) {
     var SOL_ASSEMBLY_TITLE_MODE =
         hljs.inherit(hljs.TITLE_MODE, {
             begin: /[A-Za-z$_][0-9A-Za-z$_]*/,
-            lexemes: SOL_ASSEMBLY_LEXEMES_RE,
             keywords: SOL_ASSEMBLY_KEYWORDS
         });
 
@@ -121,7 +121,6 @@ function baseAssembly(hljs) {
         begin: /\(/, end: /\)/,
         excludeBegin: true,
         excludeEnd: true,
-        lexemes: SOL_ASSEMBLY_LEXEMES_RE,
         keywords: SOL_ASSEMBLY_KEYWORDS,
         contains: [
             hljs.C_LINE_COMMENT_MODE,
@@ -141,7 +140,6 @@ function baseAssembly(hljs) {
 
     return {
         keywords: SOL_ASSEMBLY_KEYWORDS,
-        lexemes: SOL_ASSEMBLY_LEXEMES_RE,
         contains: [
             SOL_APOS_STRING_MODE,
             SOL_QUOTE_STRING_MODE,
@@ -153,7 +151,6 @@ function baseAssembly(hljs) {
             SOL_ASSEMBLY_OPERATORS,
             { // functions
                 className: 'function',
-                lexemes: SOL_ASSEMBLY_LEXEMES_RE,
                 beginKeywords: 'function', end: '{', excludeEnd: true,
                 contains: [
                     SOL_ASSEMBLY_TITLE_MODE,

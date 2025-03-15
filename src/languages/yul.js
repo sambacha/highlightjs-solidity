@@ -17,6 +17,7 @@ const {
 function hljsDefineYul(hljs) {
 
     var YUL_KEYWORDS = {
+        $pattern: SOL_ASSEMBLY_KEYWORDS.$pattern,
         keyword: SOL_ASSEMBLY_KEYWORDS.keyword + ' ' +
             'object code data',
         built_in: SOL_ASSEMBLY_KEYWORDS.built_in + ' ' +

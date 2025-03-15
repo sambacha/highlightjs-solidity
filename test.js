@@ -21,12 +21,11 @@ function getTokens(source, language = 'solidity') {
       assert(
           node.childNodes.length === 1 &&
               node.childNodes[0].nodeName === '#text',
-          'Unexpected nested tags',
+          'Unexpected nested tags'
       );
       return [type, node.childNodes[0].value];
     }
-  });
-}
+  });}
 
 
 // Taken from the Solidity repo.

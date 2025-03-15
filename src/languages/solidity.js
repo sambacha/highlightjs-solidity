@@ -60,6 +60,7 @@ function hljsDefineSolidity(hljs) {
     var ufixedTypesString = ufixedTypes.join(' ') + ' ';
 
     var SOL_KEYWORDS = {
+        $pattern: /[A-Za-z_$][A-Za-z_$0-9]*/,
         keyword:
             'var bool string ' +
             'int uint ' + intTypesString + uintTypesString +
@@ -113,7 +114,6 @@ function hljsDefineSolidity(hljs) {
         begin: /\(/, end: /\)/,
         excludeBegin: true,
         excludeEnd: true,
-        lexemes: SOL_LEXEMES_RE,
         keywords: SOL_KEYWORDS,
         contains: [
             hljs.C_LINE_COMMENT_MODE,
@@ -143,7 +143,6 @@ function hljsDefineSolidity(hljs) {
     var SOL_TITLE_MODE =
         hljs.inherit(hljs.TITLE_MODE, {
             begin: /[A-Za-z$_][0-9A-Za-z$_]*/,
-            lexemes: SOL_LEXEMES_RE,
             keywords: SOL_KEYWORDS
         });
 
@@ -161,8 +160,8 @@ function hljsDefineSolidity(hljs) {
             end: /[^A-Za-z0-9$_\.]/,
             excludeBegin: false,
             excludeEnd: true,
-            lexemes: SOL_LEXEMES_RE,
             keywords: {
+                $pattern: /[A-Za-z_$][A-Za-z_$0-9]*/,
                 built_in: obj + ' ' + props,
             },
             contains: [
@@ -210,7 +209,6 @@ function hljsDefineSolidity(hljs) {
     return {
         aliases: ['sol'],
         keywords: SOL_KEYWORDS,
-        lexemes: SOL_LEXEMES_RE,
         contains: [
             // basic literal definitions
             SOL_APOS_STRING_MODE,
@@ -239,7 +237,7 @@ function hljsDefineSolidity(hljs) {
                         },
                         {
                           className: 'variable',
-                          begin: IDENT_RE + '(?=\\s*(-)|$)',
+                          begin: SOL_LEXEMES_RE + '(?=\\s*(-)|$)',
                           endsParent: true,
                           relevance: 0
                         },
@@ -260,7 +258,6 @@ function hljsDefineSolidity(hljs) {
             SOL_OPERATORS,
             { // functions
                 className: 'function',
-                lexemes: SOL_LEXEMES_RE,
                 beginKeywords: 'function modifier event constructor fallback receive error', end: /[{;]/, excludeEnd: true,
                 contains: [
                     SOL_TITLE_MODE,
@@ -281,11 +278,10 @@ function hljsDefineSolidity(hljs) {
             SOL_RESERVED_MEMBERS,
             { // contracts & libraries & interfaces
                 className: 'class',
-                lexemes: SOL_LEXEMES_RE,
                 beginKeywords: 'contract interface library', end: '{', excludeEnd: true,
                 illegal: /[:"\[\]]/,
                 contains: [
-                    { beginKeywords: 'is', lexemes: SOL_LEXEMES_RE },
+                    { beginKeywords: 'is' },
                     SOL_TITLE_MODE,
                     SOL_FUNC_PARAMS,
                     SOL_SPECIAL_PARAMETERS,
@@ -294,7 +290,6 @@ function hljsDefineSolidity(hljs) {
                 ]
             },
             { // structs & enums
-                lexemes: SOL_LEXEMES_RE,
                 beginKeywords: 'struct enum', end: '{', excludeEnd: true,
                 illegal: /[:"\[\]]/,
                 contains: [
@@ -305,8 +300,10 @@ function hljsDefineSolidity(hljs) {
             },
             { // imports
                 beginKeywords: 'import', end: ';',
-                lexemes: SOL_LEXEMES_RE,
-                keywords: 'import from as',
+                keywords: {
+                    $pattern: /[A-Za-z_$][A-Za-z_$0-9]*/,
+                    keyword: 'import from as'
+                },
                 contains: [
                     SOL_TITLE_MODE,
                     SOL_APOS_STRING_MODE,
@@ -320,8 +317,10 @@ function hljsDefineSolidity(hljs) {
             },
             { // using
                 beginKeywords: 'using', end: ';',
-                lexemes: SOL_LEXEMES_RE,
-                keywords: 'using for global',
+                keywords: {
+                    $pattern: /[A-Za-z_$][A-Za-z_$0-9]*/,
+                    keyword: 'using for global'
+                },
                 contains: [
                     SOL_TITLE_MODE,
                     hljs.C_LINE_COMMENT_MODE,
@@ -332,8 +331,8 @@ function hljsDefineSolidity(hljs) {
             { // pragmas
                 className: 'meta',
                 beginKeywords: 'pragma', end: ';',
-                lexemes: SOL_LEXEMES_RE,
                 keywords: {
+                    $pattern: /[A-Za-z_$][A-Za-z_$0-9]*/,
                     keyword: 'pragma solidity experimental abicoder',
                     built_in: 'ABIEncoderV2 SMTChecker v1 v2'
                 },
