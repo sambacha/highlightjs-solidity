@@ -46,8 +46,7 @@ const hljsDefineSolidity = (hljs) => {
   const intTypesString = intTypes.join(' ') + ' ';
 
   const sizePrecisionPairs = [].concat.apply([],
-    numSizes.map(size => 
-      precisions.map(precision => `${size}x${precision}`)
+    numSizes.map(size => precisions.map(precision => `${size}x${precision}`)
     )
   );
 

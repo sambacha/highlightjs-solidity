@@ -4,3 +4,6 @@ cache/
 coverage/
 tmp/
 dist/
+*.zip
+*.tgz
+*.tar.gz

@@ -5,9 +5,11 @@
   "type": "module",
   "main": "src/index.js",
   "exports": {
-    "import": "./src/index.js",
-    "require": "./dist/cjs/index.js"
-  },
+    "./package.json": "./package.json",
+    "./*": {
+      "import": "./dist/*.es.min.js",
+      "require": "./dist/*.min.js"
+    },
   "files": [
     "dist",
     "src"
@@ -49,4 +51,5 @@
     "mocha": "^10.3.0",
     "parse5": "^7.1.2"
   }
+}
 }
