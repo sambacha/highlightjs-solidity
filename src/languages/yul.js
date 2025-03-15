@@ -8,21 +8,21 @@
  * @since:   2016-07-01
  */
 
-const {
+import {
   SOL_ASSEMBLY_KEYWORDS,
   baseAssembly,
   isNegativeLookbehindAvailable
-} = require("../common");
+} from "../common.js";
 
-function hljsDefineYul(hljs) {
+const hljsDefineYul = (hljs) => {
   const YUL_KEYWORDS = {
     $pattern: SOL_ASSEMBLY_KEYWORDS.$pattern,
-    keyword: SOL_ASSEMBLY_KEYWORDS.keyword + ' '
-            + 'object code data',
-    built_in: SOL_ASSEMBLY_KEYWORDS.built_in + ' '
-            + 'datasize dataoffset datacopy '
-            + 'setimmutable loadimmutable '
-            + 'linkersymbol memoryguard',
+    keyword: `${SOL_ASSEMBLY_KEYWORDS.keyword} 
+        object code data`,
+    built_in: `${SOL_ASSEMBLY_KEYWORDS.built_in} 
+        datasize dataoffset datacopy 
+        setimmutable loadimmutable 
+        linkersymbol memoryguard`,
     literal: SOL_ASSEMBLY_KEYWORDS.literal
   };
 
@@ -50,6 +50,6 @@ function hljsDefineYul(hljs) {
       ])
     }
   );
-}
+};
 
-module.exports = hljsDefineYul;
+export default hljsDefineYul;

@@ -18,7 +18,7 @@ Website: https://docs.soliditylang.org/en/latest/grammar.html
  * @since:   2016-07-01
  */
 
-function isNegativeLookbehindAvailable() {
+const isNegativeLookbehindAvailable = () => {
   try {
     // eslint-disable-next-line prefer-regex-literals
     new RegExp('(?<!.)');
@@ -26,7 +26,7 @@ function isNegativeLookbehindAvailable() {
   } catch (_) {
     return false;
   }
-}
+};
 
 // like a C number, except:
 // 1. no octal literals (leading zeroes disallowed)
@@ -48,32 +48,26 @@ const SOL_NUMBER = {
 
 const SOL_ASSEMBLY_KEYWORDS = {
   $pattern: /[A-Za-z_$][A-Za-z_$0-9.]*/,
-  keyword:
-        'assembly '
-        + 'let function '
-        + 'if switch case default for leave '
-        + 'break continue '
-        + 'u256 ' // not in old-style assembly, but in Yul
-        // NOTE: We're counting most opcodes as builtins, but the following ones we're
-        // treating as keywords because they alter control flow or halt execution
-        + 'jump jumpi '
-        + 'stop return revert selfdestruct invalid',
-  built_in:
-        // NOTE that push1 through push32, as well as jumpdest, are not included
-        'add sub mul div sdiv mod smod exp not lt gt slt sgt eq iszero '
-        + 'and or xor byte shl shr sar '
-        + 'addmod mulmod signextend keccak256 '
-        + 'pc pop '
-        + 'dup1 dup2 dup3 dup4 dup5 dup6 dup7 dup8 dup9 dup10 dup11 dup12 dup13 dup14 dup15 dup16 '
-        + 'swap1 swap2 swap3 swap4 swap5 swap6 swap7 swap8 swap9 swap10 swap11 swap12 swap13 swap14 swap15 swap16 '
-        + 'mload mstore mstore8 sload sstore msize tload tstore mcopy '
-        + 'gas address balance selfbalance caller callvalue '
-        + 'calldataload calldatasize calldatacopy codesize codecopy extcodesize extcodecopy returndatasize returndatacopy extcodehash '
-        + 'create create2 call callcode delegatecall staticcall '
-        + 'log0 log1 log2 log3 log4 '
-        + 'chainid origin gasprice basefee blobbasefee blockhash blobhash coinbase timestamp number difficulty prevrandao gaslimit ',
-  literal:
-        'true false'
+  keyword: `assembly
+    let function
+    if switch case default for leave
+    break continue
+    u256
+    jump jumpi
+    stop return revert selfdestruct invalid`,
+  built_in: `add sub mul div sdiv mod smod exp not lt gt slt sgt eq iszero
+    and or xor byte shl shr sar
+    addmod mulmod signextend keccak256
+    pc pop
+    dup1 dup2 dup3 dup4 dup5 dup6 dup7 dup8 dup9 dup10 dup11 dup12 dup13 dup14 dup15 dup16
+    swap1 swap2 swap3 swap4 swap5 swap6 swap7 swap8 swap9 swap10 swap11 swap12 swap13 swap14 swap15 swap16
+    mload mstore mstore8 sload sstore msize tload tstore mcopy
+    gas address balance selfbalance caller callvalue
+    calldataload calldatasize calldatacopy codesize codecopy extcodesize extcodecopy returndatasize returndatacopy extcodehash
+    create create2 call callcode delegatecall staticcall
+    log0 log1 log2 log3 log4
+    chainid origin gasprice basefee blobbasefee blockhash blobhash coinbase timestamp number difficulty prevrandao gaslimit`,
+  literal: 'true false'
 };
 
 const HEX_APOS_STRING_MODE = {
@@ -88,21 +82,21 @@ const HEX_QUOTE_STRING_MODE = {
 
 // I've set these up exactly like hljs's builtin STRING_MODEs,
 // except with the optional initial "unicode" text
-function solAposStringMode(hljs) {
+const solAposStringMode = (hljs) => {
   return hljs.inherit(
     hljs.APOS_STRING_MODE, // please also update solQuoteStringMode
     { begin: /(\bunicode)?'/ }
   );
-}
+};
 
-function solQuoteStringMode(hljs) {
+const solQuoteStringMode = (hljs) => {
   return hljs.inherit(
     hljs.QUOTE_STRING_MODE, // please also update solAposStringMode
     { begin: /(\bunicode)?"/ }
   );
-}
+};
 
-function baseAssembly(hljs) {
+const baseAssembly = (hljs) => {
   // this function defines a "basic" assembly environment;
   // we use it several times below with hljs.inherit to provide
   // elaborations upon this basic assembly environment
@@ -164,9 +158,10 @@ function baseAssembly(hljs) {
       }
     ]
   };
-}
+};
 
-module.exports = {
+// Export all the components directly
+export {
   SOL_ASSEMBLY_KEYWORDS,
   baseAssembly,
   solAposStringMode,

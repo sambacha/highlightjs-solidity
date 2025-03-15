@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-const hljs = require('highlight.js/lib/core.js');
-const {
+import { jest, describe, test, expect } from '@jest/globals';
+import {
   isNegativeLookbehindAvailable,
   SOL_ASSEMBLY_KEYWORDS,
   baseAssembly,
@@ -9,13 +9,18 @@ const {
   HEX_APOS_STRING_MODE,
   HEX_QUOTE_STRING_MODE,
   SOL_NUMBER
-} = require('./common.js');
+} from './common.js';
 
+// Mock highlight.js
+const hljs = {
+  inherit: jest.fn((parent, obj) => Object.assign({}, parent, obj)),
+  APOS_STRING_MODE: { className: 'string', begin: /'/ },
+  QUOTE_STRING_MODE: { className: 'string', begin: /"/ },
+  C_LINE_COMMENT_MODE: { type: 'comment', line: true },
+  C_BLOCK_COMMENT_MODE: { type: 'comment', block: true },
+  TITLE_MODE: { className: 'title' }
+};
 
-// Mock for hljs methods that we need
-hljs.inherit = jest.fn(function(parent, obj) {
-  return Object.assign({}, parent, obj);
-});
 describe('isNegativeLookbehindAvailable', () => {
   test('returns boolean indicating regex lookbehind support', () => {
     // This will return true in modern environments, false in older ones
@@ -131,13 +136,6 @@ describe('solQuoteStringMode', () => {
 });
 
 describe('baseAssembly', () => {
-  beforeEach(() => {
-    // Mock the required hljs methods and properties
-    hljs.C_LINE_COMMENT_MODE = { type: 'comment', line: true };
-    hljs.C_BLOCK_COMMENT_MODE = { type: 'comment', block: true };
-    hljs.TITLE_MODE = { className: 'title' };
-  });
-
   test('returns an object with correct structure', () => {
     const result = baseAssembly(hljs);
 

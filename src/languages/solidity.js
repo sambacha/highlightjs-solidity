@@ -9,7 +9,7 @@
  * @since:   2016-07-01
  */
 
-const {
+import {
   baseAssembly,
   solAposStringMode,
   solQuoteStringMode,
@@ -17,9 +17,9 @@ const {
   HEX_QUOTE_STRING_MODE,
   SOL_NUMBER,
   isNegativeLookbehindAvailable
-} = require("../common.js");
+} from "../common.js";
 
-function hljsDefineSolidity(hljs) {
+const hljsDefineSolidity = (hljs) => {
   const SOL_APOS_STRING_MODE = solAposStringMode(hljs);
   const SOL_QUOTE_STRING_MODE = solQuoteStringMode(hljs);
 
@@ -30,74 +30,68 @@ function hljsDefineSolidity(hljs) {
   for (let i = 0; i < 32; i++) {
     byteSizes[i] = i + 1;
   }
-  const numSizes = byteSizes.map(function(bytes) { return bytes * 8; });
+  const numSizes = byteSizes.map(bytes => bytes * 8);
   const precisions = [];
   for (let i = 0; i <= 80; i++) {
     precisions[i] = i;
   }
 
-  const bytesTypes = byteSizes.map(function(size) { return 'bytes' + size; });
+  const bytesTypes = byteSizes.map(size => `bytes${size}`);
   const bytesTypesString = bytesTypes.join(' ') + ' ';
 
-  const uintTypes = numSizes.map(function(size) { return 'uint' + size; });
+  const uintTypes = numSizes.map(size => `uint${size}`);
   const uintTypesString = uintTypes.join(' ') + ' ';
 
-  const intTypes = numSizes.map(function(size) { return 'int' + size; });
+  const intTypes = numSizes.map(size => `int${size}`);
   const intTypesString = intTypes.join(' ') + ' ';
 
   const sizePrecisionPairs = [].concat.apply([],
-    numSizes.map(function(size) {
-      return precisions.map(function(precision) {
-        return size + 'x' + precision;
-      });
-    })
+    numSizes.map(size => 
+      precisions.map(precision => `${size}x${precision}`)
+    )
   );
 
-  const fixedTypes = sizePrecisionPairs.map(function(pair) { return 'fixed' + pair; });
+  const fixedTypes = sizePrecisionPairs.map(pair => `fixed${pair}`);
   const fixedTypesString = fixedTypes.join(' ') + ' ';
 
-  const ufixedTypes = sizePrecisionPairs.map(function(pair) { return 'ufixed' + pair; });
+  const ufixedTypes = sizePrecisionPairs.map(pair => `ufixed${pair}`);
   const ufixedTypesString = ufixedTypes.join(' ') + ' ';
 
   const SOL_KEYWORDS = {
     $pattern: /[A-Za-z_$][A-Za-z_$0-9]*/,
-    keyword:
-            'var bool string '
-            + 'int uint ' + intTypesString + uintTypesString
-            + 'byte bytes ' + bytesTypesString
-            + 'fixed ufixed ' + fixedTypesString + ufixedTypesString
-            + 'enum struct mapping address unicode '
+    keyword: `var bool string 
+            int uint ${intTypesString}${uintTypesString}
+            byte bytes ${bytesTypesString}
+            fixed ufixed ${fixedTypesString}${ufixedTypesString}
+            enum struct mapping address unicode 
 
-            + 'new delete '
-            + 'if else for while continue break return throw emit try catch revert '
-            + 'unchecked '
-            // NOTE: doesn't always act as a keyword, but seems fine to include
-            + '_ '
+            new delete 
+            if else for while continue break return throw emit try catch revert 
+            unchecked 
+            _ 
 
-            + 'function modifier event constructor fallback receive error '
-            + 'virtual override '
-            + 'constant immutable anonymous indexed '
-            + 'storage memory calldata '
-            + 'external public internal payable pure view private returns '
+            function modifier event constructor fallback receive error 
+            virtual override 
+            constant immutable anonymous indexed 
+            storage memory calldata 
+            external public internal payable pure view private returns 
 
-            + 'import from as using global pragma '
-            + 'contract interface library is abstract '
-            + 'type '
-            + 'assembly',
-    literal:
-            'true false '
-            + 'wei gwei szabo finney ether '
-            + 'seconds minutes hours days weeks years',
-    built_in:
-            'self ' // :NOTE: not a real keyword, but a convention used in storage manipulation libraries
-            + 'this super selfdestruct suicide '
-            + 'now '
-            + 'msg block tx abi '
-            + 'blockhash gasleft blobhash '
-            + 'assert require '
-            + 'Error Panic '
-            + 'sha3 sha256 keccak256 ripemd160 ecrecover addmod mulmod '
-            + 'log0 log1 log2 log3 log4'
+            import from as using global pragma 
+            contract interface library is abstract 
+            type 
+            assembly`,
+    literal: `true false 
+            wei gwei szabo finney ether 
+            seconds minutes hours days weeks years`,
+    built_in: `self 
+            this super selfdestruct suicide 
+            now 
+            msg block tx abi 
+            blockhash gasleft blobhash 
+            assert require 
+            Error Panic 
+            sha3 sha256 keccak256 ripemd160 ecrecover addmod mulmod 
+            log0 log1 log2 log3 log4`
   };
 
   // note: we always put operators below comments so
@@ -132,11 +126,11 @@ function hljsDefineSolidity(hljs) {
     excludeBegin: true,
     excludeEnd: true,
     keywords: {
-      built_in: 'gas value selector address length push pop ' // members of external functions; members of arrays
-                + 'send transfer call callcode delegatecall staticcall ' // members of addresses
-                + 'balance code codehash ' // more members of addresses
-                + 'wrap unwrap ' // members of UDVTs (the types not the values)
-                + 'name creationCode runtimeCode interfaceId min max' // members of type(...)
+      built_in: `gas value selector address length push pop 
+                send transfer call callcode delegatecall staticcall 
+                balance code codehash 
+                wrap unwrap 
+                name creationCode runtimeCode interfaceId min max`
     },
     relevance: 2
   };
@@ -155,7 +149,7 @@ function hljsDefineSolidity(hljs) {
     begin: (isNegativeLookbehindAvailable() ? '(?<!\\$)\\b' : '\\b') + SOL_SPECIAL_PARAMETERS_PARTIAL_RE
   };
 
-  function makeBuiltinProps(obj, props) {
+  const makeBuiltinProps = (obj, props) => {
     return {
       begin: (isNegativeLookbehindAvailable() ? '(?<!\\$)\\b' : '\\b') + obj + '\\.\\s*',
       end: /[^A-Za-z0-9$_\.]/,
@@ -170,7 +164,7 @@ function hljsDefineSolidity(hljs) {
       ],
       relevance: 10
     };
-  }
+  };
 
   // covers the special slot/offset notation in assembly
   // (old-style, with an underscore)
@@ -378,5 +372,6 @@ function hljsDefineSolidity(hljs) {
     ],
     illegal: /#/
   };
-}
-module.exports = hljsDefineSolidity;
+};
+
+export default hljsDefineSolidity;
