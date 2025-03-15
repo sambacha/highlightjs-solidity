@@ -7,7 +7,6 @@ Description: A statically-typed curly-braces programming language designed for d
 Website: https://docs.soliditylang.org/en/latest/grammar.html
 */
 
-
 /**
  * highlight.js Solidity syntax highlighting definition
  *
@@ -18,13 +17,24 @@ Website: https://docs.soliditylang.org/en/latest/grammar.html
  * @since:   2016-07-01
  */
 
-const solidityGrammar = require("./languages/solidity");
-const yulGrammar = require("./languages/yul");
+// Import the language definitions directly
+import solidity from "./languages/solidity.js";
+import yul from "./languages/yul.js";
 
-module.exports = function(hljs) {
-    hljs.registerLanguage('solidity', solidityGrammar);
-    hljs.registerLanguage('yul', yulGrammar);
+// Export a function for highlight.js to register the languages
+const hljsDefineSolidity = (hljs) => {
+  if (typeof hljs.registerLanguage === 'function') {
+    hljs.registerLanguage('solidity', solidity);
+    hljs.registerLanguage('yul', yul);
+  } else {
+    // For testing environments that don't have registerLanguage
+    console.warn('hljs.registerLanguage is not available');
+  }
 };
 
-module.exports.solidity = solidityGrammar;
-module.exports.yul = yulGrammar;
+// Export the language definitions directly
+hljsDefineSolidity.solidity = solidity;
+hljsDefineSolidity.yul = yul;
+
+// Export the main function as default for highlight.js plugin system
+export default hljsDefineSolidity;

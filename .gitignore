@@ -1,1 +1,9 @@
 node_modules/
+.DS_Store
+cache/
+coverage/
+tmp/
+dist/
+*.zip
+*.tgz
+*.tar.gz
